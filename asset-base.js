@@ -1,6 +1,9 @@
 (function () {
   // Public R2 domain base for all image assets.
-  window.INREN_ASSET_BASE = window.INREN_ASSET_BASE || "https://pub-c58cbb9b5fbc44bb8be16a02a06946f2.r2.dev/images";
+  // Supports either:
+  // - https://<public-domain>.r2.dev
+  // - https://<public-domain>.r2.dev/images
+  window.INREN_ASSET_BASE = window.INREN_ASSET_BASE || "https://pub-c58cbb9b5fbc44bb8be16a02a06946f2.r2.dev";
 
   const ABSOLUTE_RE = /^(?:[a-z]+:)?\/\//i;
   const SKIP_RE = /^(?:data:|blob:|mailto:|tel:|javascript:|#)/i;
@@ -16,6 +19,8 @@
       .join("/");
     return encoded + suffix;
   };
+
+  const stripLeadingImages = (pathValue) => pathValue.replace(/^\.?\/?images\//i, "");
 
   const resolveAssetUrl = (input) => {
     if (!input) {
@@ -36,7 +41,13 @@
       return input;
     }
 
-    return base + "/" + encodePath(value);
+    const normalizedValue = /^\.?\/?images\//i.test(value)
+      ? stripLeadingImages(value)
+      : value;
+
+    const baseHasImagesSuffix = /\/images$/i.test(base);
+    const prefix = baseHasImagesSuffix ? base : base + "/images";
+    return prefix + "/" + encodePath(normalizedValue);
   };
 
   const rewriteSrcset = (srcset) => {

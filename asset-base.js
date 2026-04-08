@@ -7,7 +7,6 @@
 
   const ABSOLUTE_RE = /^(?:[a-z]+:)?\/\//i;
   const SKIP_RE = /^(?:data:|blob:|mailto:|tel:|javascript:|#)/i;
-  const PIXEL_PLACEHOLDER = "data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=";
   const FALLBACK_DATA_URL = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'>"
       + "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>"
@@ -125,64 +124,6 @@
     });
   };
 
-  const imageObserver = (typeof IntersectionObserver !== "undefined")
-    ? new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
-
-        const img = entry.target;
-        const originalSrc = img.dataset.inrenDeferredSrc;
-        const originalSrcset = img.dataset.inrenDeferredSrcset;
-
-        if (originalSrc) {
-          img.setAttribute("src", originalSrc);
-          delete img.dataset.inrenDeferredSrc;
-        }
-        if (originalSrcset) {
-          img.setAttribute("srcset", originalSrcset);
-          delete img.dataset.inrenDeferredSrcset;
-        }
-
-        imageObserver.unobserve(img);
-      });
-    }, { rootMargin: "120px 0px" })
-    : null;
-
-  const maybeDeferImageRequest = (img) => {
-    if (!imageObserver) {
-      return;
-    }
-
-    if (!img || img.dataset.inrenDeferredBound === "1") {
-      return;
-    }
-
-    const src = img.getAttribute("src") || "";
-    if (!src || src.indexOf("data:image/") === 0) {
-      return;
-    }
-
-    const rect = img.getBoundingClientRect();
-    const viewportH = window.innerHeight || document.documentElement.clientHeight || 0;
-    const shouldDefer = rect.top > viewportH * 1.15;
-    if (!shouldDefer) {
-      return;
-    }
-
-    img.dataset.inrenDeferredBound = "1";
-    img.dataset.inrenDeferredSrc = src;
-
-    const srcset = img.getAttribute("srcset");
-    if (srcset) {
-      img.dataset.inrenDeferredSrcset = srcset;
-      img.removeAttribute("srcset");
-    }
-
-    img.setAttribute("src", PIXEL_PLACEHOLDER);
-    imageObserver.observe(img);
-  };
 
   const bindImageFallback = (img) => {
     if (!img || img.tagName !== "IMG") {
@@ -223,8 +164,6 @@
 
     img.dataset.inrenFallbackBound = "1";
     img.addEventListener("error", activateFallback);
-
-    maybeDeferImageRequest(img);
 
     if (img.complete && img.naturalWidth === 0 && img.getAttribute("src")) {
       activateFallback();

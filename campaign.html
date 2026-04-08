@@ -23,11 +23,66 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <style>
       body.campaign-page {
-        background-image: url('images/visuals/01/IN REN CAMPAIGN/0894.jpg');
-        background-size: cover;
-        background-position: center -80px;
-        background-attachment: fixed;
+        position: relative;
+        isolation: isolate;
+        min-height: 100vh;
+        background-color: #040102;
         color: #9C0C0C;
+        overflow-x: hidden;
+      }
+
+      .campaign-backdrop {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background:
+          radial-gradient(circle at 16% 18%, rgba(128, 0, 0, 0.28) 0 8%, transparent 24%),
+          radial-gradient(circle at 84% 14%, rgba(62, 0, 0, 0.36) 0 7%, transparent 22%),
+          radial-gradient(circle at 28% 76%, rgba(150, 0, 0, 0.2) 0 9%, transparent 26%),
+          linear-gradient(135deg, #070203 0%, #0f0204 34%, #040102 100%);
+      }
+
+      .campaign-backdrop::before,
+      .campaign-backdrop::after {
+        content: "";
+        position: fixed;
+        inset: -22vmax;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .campaign-backdrop::before {
+        background:
+          conic-gradient(from 215deg at 22% 26%, transparent 0 12%, rgba(120, 0, 0, 0.24) 12% 18%, transparent 18% 38%, rgba(58, 0, 0, 0.32) 38% 44%, transparent 44% 100%),
+          conic-gradient(from 35deg at 78% 22%, transparent 0 10%, rgba(160, 0, 0, 0.16) 10% 16%, transparent 16% 42%, rgba(78, 0, 0, 0.24) 42% 49%, transparent 49% 100%),
+          radial-gradient(circle at 18% 20%, rgba(170, 0, 0, 0.5) 0 4%, transparent 15%),
+          radial-gradient(circle at 70% 14%, rgba(110, 0, 0, 0.34) 0 5%, transparent 18%),
+          radial-gradient(circle at 36% 64%, rgba(138, 0, 0, 0.26) 0 7%, transparent 23%),
+          radial-gradient(circle at 82% 72%, rgba(72, 0, 0, 0.28) 0 6%, transparent 22%);
+        filter: blur(40px) saturate(135%);
+        opacity: 0.95;
+        mix-blend-mode: screen;
+        transform: rotate(-6deg);
+      }
+
+      .campaign-backdrop::after {
+        background:
+          radial-gradient(circle at 50% 50%, transparent 0 22%, rgba(0, 0, 0, 0.46) 58%, transparent 74%),
+          radial-gradient(circle at 20% 72%, rgba(86, 0, 0, 0.18) 0 7%, transparent 24%),
+          radial-gradient(circle at 74% 56%, rgba(102, 0, 0, 0.2) 0 8%, transparent 26%),
+          conic-gradient(from 128deg at 44% 58%, transparent 0 28%, rgba(126, 0, 0, 0.16) 28% 34%, transparent 34% 58%, rgba(30, 0, 0, 0.28) 58% 64%, transparent 64% 100%);
+        filter: blur(18px);
+        opacity: 0.7;
+        mix-blend-mode: multiply;
+      }
+
+      .campaign-page .grain,
+      .campaign-page .site-header,
+      .campaign-page main,
+      .campaign-page .site-footer {
+        position: relative;
+        z-index: 1;
       }
 
       .campaign-page .site-header,
@@ -169,6 +224,7 @@
     </style>
   </head>
   <body class="season-page campaign-page">
+    <div class="campaign-backdrop" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
 
     <header class="site-header">

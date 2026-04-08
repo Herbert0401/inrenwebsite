@@ -161,7 +161,7 @@ main,
   height: auto;
   aspect-ratio: var(--home-image-ratio, 3 / 4);
   max-height: min(93.6vh, 984px);
-  background-image: var(--home-right-image-url, url("images/visuals/01/IN REN CAMPAIGN/0836x.jpg"));
+  background-image: var(--home-right-image-url, url("images/visuals/01/IN REN CAMPAIGN/0836x.webp"));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -187,7 +187,7 @@ main,
 }
 
 .home-page .home-right-image::before {
-  background-image: var(--home-right-image-url, url("images/visuals/01/IN REN CAMPAIGN/0836x.jpg"));
+  background-image: var(--home-right-image-url, url("images/visuals/01/IN REN CAMPAIGN/0836x.webp"));
   background-size: cover;
   background-position: calc(50% + var(--wave-shift-x)) calc(50% + var(--wave-shift-y));
   background-repeat: no-repeat;

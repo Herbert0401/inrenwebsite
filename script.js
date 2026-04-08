@@ -230,7 +230,7 @@ if (menuWrap && menuButton) {
 const homeRightImage = document.querySelector('.home-page .home-right-image');
 
 if (homeRightImage) {
-  const defaultHomeImage = 'images/visuals/01/IN REN CAMPAIGN/0836x.jpg';
+  const defaultHomeImage = 'images/visuals/01/IN REN CAMPAIGN/0836x.webp';
   const imageResolver = window.inrenResolveAssetUrl || ((value) => value);
   const imageUrl = imageResolver(defaultHomeImage);
 

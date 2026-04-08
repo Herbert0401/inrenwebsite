@@ -1,12 +1,10 @@
 (function () {
-  // Public R2 domain base for all image assets.
-  // Supports either:
-  // - https://<public-domain>.r2.dev
-  // - https://<public-domain>.r2.dev/images
   window.INREN_ASSET_BASE = window.INREN_ASSET_BASE || "https://pub-c58cbb9b5fbc44bb8be16a02a06946f2.r2.dev";
 
   const ABSOLUTE_RE = /^(?:[a-z]+:)?\/\//i;
   const SKIP_RE = /^(?:data:|blob:|mailto:|tel:|javascript:|#)/i;
+  const IMG_RE = /^\.?\/?images\//i;
+
   const FALLBACK_DATA_URL = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'>"
       + "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>"
@@ -21,35 +19,6 @@
 
   const normalizeBase = (base) => String(base || "").trim().replace(/\/+$/, "");
 
-   const ensurePerformanceHints = () => {
-     const base = normalizeBase(window.INREN_ASSET_BASE);
-     if (!base) {
-       return;
-     }
-
-     let origin = "";
-     try {
-       origin = new URL(base).origin;
-     } catch (_error) {
-       return;
-     }
-
-     if (!origin) {
-       return;
-     }
-
-     const existing = document.head.querySelector(`link[rel="preconnect"][href="${origin}"]`);
-     if (existing) {
-       return;
-     }
-
-     const link = document.createElement("link");
-     link.rel = "preconnect";
-     link.href = origin;
-     link.crossOrigin = "anonymous";
-     document.head.appendChild(link);
-   };
-
   const encodePath = (pathValue) => {
     const [rawPath, suffix = ""] = String(pathValue).split(/([?#].*)/, 2);
     const cleaned = rawPath.replace(/^\.?\//, "");
@@ -59,8 +28,6 @@
       .join("/");
     return encoded + suffix;
   };
-
-  const stripLeadingImages = (pathValue) => pathValue.replace(/^\.?\/?images\//i, "");
 
   const resolveAssetUrl = (input) => {
     if (!input) {
@@ -72,7 +39,7 @@
       return input;
     }
 
-    if (!/^\.?\/?images\//i.test(value)) {
+    if (!IMG_RE.test(value)) {
       return input;
     }
 
@@ -81,12 +48,8 @@
       return input;
     }
 
-    const normalizedValue = /^\.?\/?images\//i.test(value)
-      ? stripLeadingImages(value)
-      : value;
-
-    const baseHasImagesSuffix = /\/images$/i.test(base);
-    const prefix = baseHasImagesSuffix ? base : base + "/images";
+    const normalizedValue = value.replace(IMG_RE, "");
+    const prefix = /\/images$/i.test(base) ? base : base + "/images";
     return prefix + "/" + encodePath(normalizedValue);
   };
 
@@ -102,10 +65,8 @@
         if (!trimmed) {
           return trimmed;
         }
-
         const bits = trimmed.split(/\s+/);
-        const rewritten = resolveAssetUrl(bits[0]);
-        return [rewritten].concat(bits.slice(1)).join(" ");
+        return [resolveAssetUrl(bits[0])].concat(bits.slice(1)).join(" ");
       })
       .join(", ");
   };
@@ -117,23 +78,27 @@
 
     return styleText.replace(/url\((['"]?)([^'")]+)\1\)/gi, (all, quote, url) => {
       const next = resolveAssetUrl(url);
-      if (next === url) {
-        return all;
-      }
-      return "url(\"" + next + "\")";
+      return next === url ? all : `url("${next}")`;
     });
   };
 
-  const bindImageFallback = (img) => {
+  const bindImageBehavior = (img) => {
     if (!img || img.tagName !== "IMG") {
       return;
+    }
+
+    if (!img.hasAttribute("loading")) {
+      img.loading = "lazy";
+    }
+    if (!img.hasAttribute("decoding")) {
+      img.decoding = "async";
     }
 
     if (img.dataset.inrenFallbackBound === "1") {
       return;
     }
 
-    const activateFallback = () => {
+    const onError = () => {
       if (img.dataset.inrenFallbackApplied === "1") {
         return;
       }
@@ -141,17 +106,6 @@
       const current = img.currentSrc || img.getAttribute("src") || "";
       if (current.indexOf("data:image/svg+xml") === 0) {
         return;
-
-       if (!img.hasAttribute("decoding")) {
-         img.decoding = "async";
-       }
-       if (!img.hasAttribute("loading")) {
-         img.loading = "lazy";
-       }
-       if (!img.hasAttribute("fetchpriority")) {
-         img.setAttribute("fetchpriority", "low");
-       }
-
       }
 
       img.dataset.inrenFallbackApplied = "1";
@@ -162,10 +116,10 @@
     };
 
     img.dataset.inrenFallbackBound = "1";
-    img.addEventListener("error", activateFallback);
+    img.addEventListener("error", onError);
 
     if (img.complete && img.naturalWidth === 0 && img.getAttribute("src")) {
-      activateFallback();
+      onError();
     }
   };
 
@@ -182,8 +136,6 @@
       }
     }
 
-    bindImageFallback(el);
-
     if (el.hasAttribute("srcset")) {
       const srcset = el.getAttribute("srcset");
       const next = rewriteSrcset(srcset);
@@ -193,47 +145,19 @@
     }
 
     if (el.hasAttribute("style")) {
-
-     const deferBackgroundImage = (el) => {
-       if (!el || el.nodeType !== 1) {
-         return;
-       }
-
-       if (!el.classList || !el.classList.contains("gallery-image")) {
-         return;
-       }
-
-       if (el.dataset.inrenBgBound === "1") {
-         return;
-       }
-
-       el.dataset.inrenBgBound = "1";
-
-       const bg = getComputedStyle(el).backgroundImage;
-       if (!bg || bg === "none") {
-         return;
-       }
-
-       if (!bgObserver) {
-         return;
-       }
-
-       el.dataset.inrenDeferredBg = bg;
-       el.style.backgroundImage = "none";
-       bgObserver.observe(el);
-     };
       const styleValue = el.getAttribute("style");
       const nextStyle = rewriteInlineStyleUrls(styleValue);
       if (nextStyle && nextStyle !== styleValue) {
         el.setAttribute("style", nextStyle);
       }
     }
+
+    bindImageBehavior(el);
   };
 
   const applyToTree = (root) => {
     const scope = root || document;
     applyToElement(scope);
-     deferBackgroundImage(scope);
 
     if (!scope.querySelectorAll) {
       return;
@@ -241,9 +165,6 @@
 
     const candidates = scope.querySelectorAll("[src], [srcset], [style]");
     candidates.forEach(applyToElement);
-
-     const bgCandidates = scope.querySelectorAll(".gallery-image");
-     bgCandidates.forEach(deferBackgroundImage);
   };
 
   const rewriteProductData = () => {
@@ -254,14 +175,13 @@
 
     const walk = (node) => {
       if (Array.isArray(node)) {
-        for (let i = 0; i < node.length; i += 1) {
-          const value = node[i];
-          if (typeof value === "string") {
-            node[i] = resolveAssetUrl(value);
-          } else if (value && typeof value === "object") {
-            walk(value);
+        node.forEach((item, idx) => {
+          if (typeof item === "string") {
+            node[idx] = resolveAssetUrl(item);
+          } else if (item && typeof item === "object") {
+            walk(item);
           }
-        }
+        });
         return;
       }
 
@@ -278,14 +198,37 @@
     walk(data);
   };
 
+  const ensurePerformanceHints = () => {
+    const base = normalizeBase(window.INREN_ASSET_BASE);
+    if (!base) {
+      return;
+    }
+
+    try {
+      const origin = new URL(base).origin;
+      const selector = `link[rel=\"preconnect\"][href=\"${origin}\"]`;
+      if (document.head.querySelector(selector)) {
+        return;
+      }
+
+      const link = document.createElement("link");
+      link.rel = "preconnect";
+      link.href = origin;
+      link.crossOrigin = "anonymous";
+      document.head.appendChild(link);
+    } catch (_error) {
+      // Ignore invalid URLs; local paths still work.
+    }
+  };
+
   window.inrenResolveAssetUrl = resolveAssetUrl;
   window.inrenApplyAssetBase = function (root) {
     rewriteProductData();
     applyToTree(root || document);
   };
 
-  const boot = function () {
-     ensurePerformanceHints();
+  const boot = () => {
+    ensurePerformanceHints();
     rewriteProductData();
     applyToTree(document);
 
@@ -297,10 +240,7 @@
       });
     });
 
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true,
-    });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   };
 
   if (document.readyState === "loading") {

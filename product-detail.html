@@ -305,6 +305,7 @@
         const imageList = Array.isArray(product.images) && product.images.length > 0
           ? product.images
           : [product.image].filter(Boolean);
+        const resolveAsset = window.inrenResolveAssetUrl || ((value) => value);
 
         let activeIndex = 0;
         let pointerStartX = 0;
@@ -335,7 +336,7 @@
 
             const image = document.createElement("img");
             image.className = "carousel-image";
-            image.src = src;
+            image.src = resolveAsset(src);
             image.alt = `${product.name} - ${index + 1}`;
             image.draggable = false;
             slide.appendChild(image);
@@ -347,7 +348,7 @@
             thumbBtn.setAttribute("aria-label", `Go to image ${index + 1}`);
 
             const thumbImg = document.createElement("img");
-            thumbImg.src = src;
+            thumbImg.src = resolveAsset(src);
             thumbImg.alt = "";
             thumbBtn.appendChild(thumbImg);
 

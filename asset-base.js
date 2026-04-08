@@ -21,6 +21,35 @@
 
   const normalizeBase = (base) => String(base || "").trim().replace(/\/+$/, "");
 
+   const ensurePerformanceHints = () => {
+     const base = normalizeBase(window.INREN_ASSET_BASE);
+     if (!base) {
+       return;
+     }
+
+     let origin = "";
+     try {
+       origin = new URL(base).origin;
+     } catch (_error) {
+       return;
+     }
+
+     if (!origin) {
+       return;
+     }
+
+     const existing = document.head.querySelector(`link[rel="preconnect"][href="${origin}"]`);
+     if (existing) {
+       return;
+     }
+
+     const link = document.createElement("link");
+     link.rel = "preconnect";
+     link.href = origin;
+     link.crossOrigin = "anonymous";
+     document.head.appendChild(link);
+   };
+
   const encodePath = (pathValue) => {
     const [rawPath, suffix = ""] = String(pathValue).split(/([?#].*)/, 2);
     const cleaned = rawPath.replace(/^\.?\//, "");
@@ -112,6 +141,17 @@
       const current = img.currentSrc || img.getAttribute("src") || "";
       if (current.indexOf("data:image/svg+xml") === 0) {
         return;
+
+       if (!img.hasAttribute("decoding")) {
+         img.decoding = "async";
+       }
+       if (!img.hasAttribute("loading")) {
+         img.loading = "lazy";
+       }
+       if (!img.hasAttribute("fetchpriority")) {
+         img.setAttribute("fetchpriority", "low");
+       }
+
       }
 
       img.dataset.inrenFallbackApplied = "1";
@@ -153,6 +193,35 @@
     }
 
     if (el.hasAttribute("style")) {
+
+     const deferBackgroundImage = (el) => {
+       if (!el || el.nodeType !== 1) {
+         return;
+       }
+
+       if (!el.classList || !el.classList.contains("gallery-image")) {
+         return;
+       }
+
+       if (el.dataset.inrenBgBound === "1") {
+         return;
+       }
+
+       el.dataset.inrenBgBound = "1";
+
+       const bg = getComputedStyle(el).backgroundImage;
+       if (!bg || bg === "none") {
+         return;
+       }
+
+       if (!bgObserver) {
+         return;
+       }
+
+       el.dataset.inrenDeferredBg = bg;
+       el.style.backgroundImage = "none";
+       bgObserver.observe(el);
+     };
       const styleValue = el.getAttribute("style");
       const nextStyle = rewriteInlineStyleUrls(styleValue);
       if (nextStyle && nextStyle !== styleValue) {
@@ -164,6 +233,7 @@
   const applyToTree = (root) => {
     const scope = root || document;
     applyToElement(scope);
+     deferBackgroundImage(scope);
 
     if (!scope.querySelectorAll) {
       return;
@@ -171,6 +241,9 @@
 
     const candidates = scope.querySelectorAll("[src], [srcset], [style]");
     candidates.forEach(applyToElement);
+
+     const bgCandidates = scope.querySelectorAll(".gallery-image");
+     bgCandidates.forEach(deferBackgroundImage);
   };
 
   const rewriteProductData = () => {
@@ -212,6 +285,7 @@
   };
 
   const boot = function () {
+     ensurePerformanceHints();
     rewriteProductData();
     applyToTree(document);
 

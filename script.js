@@ -230,8 +230,11 @@ if (menuWrap && menuButton) {
 const homeRightImage = document.querySelector('.home-page .home-right-image');
 
 if (homeRightImage) {
-  const bgImage = getComputedStyle(homeRightImage).backgroundImage;
-  const imageUrl = bgImage.replace(/url\(["']?(.+?)["']?\)/, '$1');
+  const defaultHomeImage = 'images/visuals/01/IN REN CAMPAIGN/0836x.jpg';
+  const imageResolver = window.inrenResolveAssetUrl || ((value) => value);
+  const imageUrl = imageResolver(defaultHomeImage);
+
+  homeRightImage.style.setProperty('--home-right-image-url', `url("${imageUrl}")`);
 
   if (imageUrl && imageUrl !== 'none') {
     const probe = new Image();

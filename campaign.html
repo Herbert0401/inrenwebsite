@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IN REN BY REENLAUF | Campaign</title>
+    <meta
+      name="description"
+      content="IN REN BY REENLAUF campaign showcase."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <style>
+      body.campaign-page {
+        background-image: url('images/visuals/01/IN REN CAMPAIGN/0894.jpg');
+        background-size: cover;
+        background-position: center -80px;
+        background-attachment: fixed;
+        color: #9C0C0C;
+      }
+
+      .campaign-page .site-header,
+      .campaign-page .site-header a,
+      .campaign-page .site-header h1,
+      .campaign-page .sub-hero,
+      .campaign-page .sub-hero p,
+      .campaign-page .sub-hero h1,
+      .campaign-page .overline,
+      .campaign-page .site-footer,
+      .campaign-page .site-footer p {
+        color: #9C0C0C;
+      }
+
+      .campaign-gallery {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+        padding: 2rem 1.25rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .gallery-item {
+        position: relative;
+      }
+
+      .gallery-item.landscape-item {
+        grid-column: span 2;
+        display: flex;
+        justify-content: center;
+      }
+
+      .gallery-image {
+        width: 100%;
+        background-size: 100% auto;
+        background-position: center;
+        background-repeat: no-repeat;
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .gallery-image.landscape-fixed {
+        width: 75%;
+        aspect-ratio: 3 / 2;
+        height: auto !important;
+        background-size: cover;
+      }
+
+      .gallery-image:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 166, 82, 0.2);
+      }
+
+      @media (max-width: 768px) {
+        .campaign-gallery {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0.8rem;
+          padding: 1.5rem 1rem;
+        }
+
+        .gallery-item.landscape-item {
+          grid-column: span 2;
+        }
+
+        .gallery-image.landscape-fixed {
+          width: 75%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .campaign-gallery {
+          grid-template-columns: 1fr;
+          gap: 0.6rem;
+          padding: 1rem;
+        }
+
+        .gallery-item.landscape-item {
+          grid-column: span 1;
+        }
+
+        .gallery-image.landscape-fixed {
+          width: 100%;
+        }
+      }
+
+      .gallery-image {
+        cursor: pointer;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .campaign-modal-content {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      .modal-image {
+        max-width: 90vw;
+        max-height: 90vh;
+        object-fit: contain;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        display: block;
+      }
+    </style>
+  </head>
+  <body class="season-page campaign-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="header-brand">
+        <a class="brand" href="index.html">IN REN BY REENLAUF</a>
+      </div>
+      <div class="header-nav">
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="sub-hero">
+        <p class="overline">Visual Story</p>
+        <h1>Campaign</h1>
+      </section>
+
+      <section class="campaign-gallery">
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/1011x.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/1274x.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/1340x.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/0760x.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/0783.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/0836x.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/0864x.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/01/IN REN CAMPAIGN/1269x.jpg');"></div>
+        </div>
+      </section>
+
+      <section class="campaign-gallery">
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/7月/CP/LOOK2/3A9A7864.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/7月/CP/LOOK2/3A9A7931.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/7月/CP/LOOK1/inren07191336.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/7月/CP/LOOK1/inren07191239.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/7月/CP/LOOK1/inren07191218.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/5月/CP look2/238A7598.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/5月/CP look2/238A7443.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/5月/CP look1/238A7214.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/3月/238A96182.jpg');"></div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-image" style="background-image: url('images/visuals/03/3月/CP最终修图/LOOK1/238A9411.jpg');"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-overlay" id="imageModal">
+      <div class="modal-content campaign-modal-content">
+        <img class="modal-image" id="modalImage" src="" alt="Enlarged image">
+      </div>
+    </div>
+
+    <footer class="site-footer" id="contact">
+      <p>INREN Studio</p>
+      <p>Shenzhen</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+      // 动态调整图片高度
+      document.addEventListener('DOMContentLoaded', function() {
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalContent = document.querySelector('.campaign-modal-content');
+        
+        // 图片高度调整
+        galleryImages.forEach(img => {
+          const galleryItem = img.closest('.gallery-item');
+          const backgroundImage = img.style.backgroundImage;
+          const imageUrl = backgroundImage.replace(/url\(['"]?([^'")]+)['"]?\)/, '$1');
+          
+          const tempImg = new Image();
+          tempImg.onload = function() {
+            if (this.width > this.height) {
+              img.classList.add('landscape-fixed');
+              galleryItem?.classList.add('landscape-item');
+              img.style.height = '';
+            } else {
+              img.classList.remove('landscape-fixed');
+              galleryItem?.classList.remove('landscape-item');
+              const aspectRatio = this.height / this.width;
+              const containerWidth = img.offsetWidth;
+              const calculatedHeight = containerWidth * aspectRatio;
+              img.style.height = calculatedHeight + 'px';
+            }
+          };
+          tempImg.src = imageUrl;
+
+          // 点击放大图片
+          img.addEventListener('click', function() {
+            modalImage.src = imageUrl;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          });
+        });
+
+        // 点击任意位置关闭
+        modal.addEventListener('click', function(e) {
+          modal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+        });
+
+        // 按 ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

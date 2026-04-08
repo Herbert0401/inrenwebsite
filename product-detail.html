@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IN REN BY REENLAUF | Product Detail</title>
+    <meta name="description" content="IN REN BY REENLAUF product detail." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .detail-wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 5rem;
+      }
+
+      .detail-back {
+        display: inline-block;
+        margin-bottom: 1.2rem;
+        text-decoration: none;
+        color: var(--accent);
+        font-family: "IBM Plex Mono", monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.72rem;
+      }
+
+      .detail-card {
+        border: 1px solid var(--line);
+        background: #000;
+        padding: 1rem;
+      }
+
+      .detail-layout {
+        display: grid;
+        grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+        gap: 1.4rem;
+      }
+
+      .detail-info {
+        position: sticky;
+        top: 1rem;
+        align-self: start;
+      }
+
+      .detail-name {
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+      }
+
+      .detail-price {
+        margin: 0.75rem 0 0;
+        color: #00ff66;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+      }
+
+      .detail-price::before {
+        content: "\00A5";
+        margin-right: 0.2em;
+      }
+
+      .detail-description {
+        margin: 1rem 0 0;
+        color: var(--muted);
+        line-height: 1.7;
+        white-space: pre-line;
+      }
+
+      .detail-size {
+        margin: 1rem 0 0;
+        color: var(--ink);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.84rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .carousel {
+        border: 1px solid rgba(0, 166, 82, 0.28);
+        background: #050706;
+        padding: 0.8rem;
+      }
+
+      .carousel-viewport {
+        overflow: hidden;
+        position: relative;
+        touch-action: pan-y;
+      }
+
+      .carousel-track {
+        display: flex;
+        transition: transform 320ms ease;
+        will-change: transform;
+      }
+
+      .carousel-slide {
+        min-width: 100%;
+      }
+
+      .carousel-image {
+        width: 100%;
+        max-height: 72vh;
+        object-fit: contain;
+        display: block;
+        user-select: none;
+      }
+
+      .carousel-controls {
+        margin-top: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .carousel-arrows {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .carousel-arrow {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--line);
+        background: #000;
+        color: #00a652;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .carousel-arrow:hover,
+      .carousel-arrow:focus-visible {
+        border-color: #00ff66;
+        color: #00ff66;
+        outline: none;
+      }
+
+      .carousel-counter {
+        color: #00ff66;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+      }
+
+      .carousel-thumbs {
+        margin-top: 0.8rem;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .carousel-thumb {
+        width: 56px;
+        height: 56px;
+        border: 1px solid var(--line);
+        padding: 0;
+        background: #000;
+        cursor: pointer;
+      }
+
+      .carousel-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .carousel-thumb.is-active {
+        border-color: #00ff66;
+      }
+
+      .detail-empty {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .detail-links {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .is-hidden {
+        display: none !important;
+      }
+
+      @media (max-width: 768px) {
+        .detail-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .detail-info {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body class="season-page">
+    <div class="grain" aria-hidden="true"></div>
+    <main class="detail-wrap">
+      <article class="detail-card">
+        <div class="detail-layout" id="detailLayout">
+          <section class="detail-info">
+            <h1 class="detail-name" id="detailName">Product</h1>
+            <p class="detail-price" id="detailPrice">0.00</p>
+            <p class="detail-description" id="detailDescription">Product description</p>
+            <p class="detail-size">Size: S / M / L / XL</p>
+          </section>
+          <section class="detail-gallery">
+            <div class="carousel" id="carousel">
+              <div class="carousel-viewport" id="carouselViewport">
+                <div class="carousel-track" id="carouselTrack"></div>
+              </div>
+              <div class="carousel-controls" id="carouselControls">
+                <div class="carousel-arrows">
+                  <button class="carousel-arrow" id="arrowPrev" type="button" aria-label="Previous image">&#8249;</button>
+                  <button class="carousel-arrow" id="arrowNext" type="button" aria-label="Next image">&#8250;</button>
+                </div>
+                <div class="carousel-counter" id="carouselCounter">1 / 1</div>
+              </div>
+              <div class="carousel-thumbs" id="carouselThumbs"></div>
+            </div>
+          </section>
+        </div>
+        <p class="detail-empty" id="detailEmpty" hidden></p>
+      </article>
+    </main>
+
+    <script src="data/products.js"></script>
+    <script>
+      (function () {
+        const params = new URLSearchParams(window.location.search);
+        const legacyItem = params.get("item");
+        const idParam = params.get("id");
+
+        if (!idParam && legacyItem) {
+          const index = Number.parseInt(legacyItem, 10);
+          if (!Number.isNaN(index) && index > 0) {
+            const seasonParam = Number.parseInt(params.get("season"), 10);
+            const referrerMatch = document.referrer.match(/season-(\d+)\.html/i);
+            const referrerSeason = referrerMatch ? Number.parseInt(referrerMatch[1], 10) : NaN;
+            const mappedSeason = Number.isInteger(seasonParam) && seasonParam > 0
+              ? seasonParam
+              : (Number.isInteger(referrerSeason) && referrerSeason > 0 ? referrerSeason : 1);
+
+            const mappedId = `s${mappedSeason}-${String(index).padStart(3, "0")}`;
+            const nextUrl = `${window.location.pathname}?id=${encodeURIComponent(mappedId)}`;
+            window.location.replace(nextUrl);
+            return;
+          }
+        }
+
+        const allProducts = Object.values((window.INREN_PRODUCTS && window.INREN_PRODUCTS.bySeason) || {}).flat();
+        const product = allProducts.find((item) => item.id === idParam);
+
+        const detailLayout = document.getElementById("detailLayout");
+        const detailName = document.getElementById("detailName");
+        const detailPrice = document.getElementById("detailPrice");
+        const detailDescription = document.getElementById("detailDescription");
+        const detailEmpty = document.getElementById("detailEmpty");
+        const carouselTrack = document.getElementById("carouselTrack");
+        const carouselViewport = document.getElementById("carouselViewport");
+        const carouselControls = document.getElementById("carouselControls");
+        const carouselCounter = document.getElementById("carouselCounter");
+        const carouselThumbs = document.getElementById("carouselThumbs");
+        const arrowPrev = document.getElementById("arrowPrev");
+        const arrowNext = document.getElementById("arrowNext");
+        const descMeta = document.querySelector('meta[name="description"]');
+
+        if (!product) {
+          document.title = "Product Not Found - IN REN BY REENLAUF";
+          if (descMeta) {
+            descMeta.setAttribute("content", "The requested product was not found.");
+          }
+
+          detailLayout.hidden = true;
+          detailEmpty.hidden = false;
+          detailEmpty.textContent = "Sorry, this product does not exist or has been removed.";
+          return;
+        }
+
+        const descriptionText = (product.description || "IN REN BY REENLAUF product detail.").slice(0, 50);
+        document.title = `${product.name} - IN REN BY REENLAUF`;
+        if (descMeta) {
+          descMeta.setAttribute("content", descriptionText);
+        }
+
+        detailName.textContent = product.name;
+        detailPrice.textContent = Number(product.price).toFixed(2);
+        detailDescription.textContent = product.description || "No description available.";
+
+        const imageList = Array.isArray(product.images) && product.images.length > 0
+          ? product.images
+          : [product.image].filter(Boolean);
+
+        let activeIndex = 0;
+        let pointerStartX = 0;
+        let pointerDeltaX = 0;
+        let dragging = false;
+
+        const clampIndex = (value) => {
+          const total = imageList.length;
+          if (total === 0) {
+            return 0;
+          }
+          if (value < 0) {
+            return total - 1;
+          }
+          if (value >= total) {
+            return 0;
+          }
+          return value;
+        };
+
+        const renderSlides = () => {
+          carouselTrack.innerHTML = "";
+          carouselThumbs.innerHTML = "";
+
+          imageList.forEach((src, index) => {
+            const slide = document.createElement("div");
+            slide.className = "carousel-slide";
+
+            const image = document.createElement("img");
+            image.className = "carousel-image";
+            image.src = src;
+            image.alt = `${product.name} - ${index + 1}`;
+            image.draggable = false;
+            slide.appendChild(image);
+            carouselTrack.appendChild(slide);
+
+            const thumbBtn = document.createElement("button");
+            thumbBtn.className = "carousel-thumb";
+            thumbBtn.type = "button";
+            thumbBtn.setAttribute("aria-label", `Go to image ${index + 1}`);
+
+            const thumbImg = document.createElement("img");
+            thumbImg.src = src;
+            thumbImg.alt = "";
+            thumbBtn.appendChild(thumbImg);
+
+            thumbBtn.addEventListener("click", () => {
+              setActive(index);
+            });
+
+            carouselThumbs.appendChild(thumbBtn);
+          });
+        };
+
+        const updateUI = () => {
+          carouselTrack.style.transform = `translateX(${-activeIndex * 100}%)`;
+          carouselCounter.textContent = `${activeIndex + 1} / ${imageList.length}`;
+
+          const thumbs = carouselThumbs.querySelectorAll(".carousel-thumb");
+          thumbs.forEach((thumb, index) => {
+            thumb.classList.toggle("is-active", index === activeIndex);
+          });
+        };
+
+        const setActive = (nextIndex) => {
+          activeIndex = clampIndex(nextIndex);
+          updateUI();
+        };
+
+        renderSlides();
+
+        if (imageList.length <= 1) {
+          carouselControls.classList.add("is-hidden");
+          carouselThumbs.classList.add("is-hidden");
+        }
+
+        updateUI();
+
+        arrowPrev.addEventListener("click", () => {
+          setActive(activeIndex - 1);
+        });
+
+        arrowNext.addEventListener("click", () => {
+          setActive(activeIndex + 1);
+        });
+
+        carouselViewport.addEventListener("pointerdown", (event) => {
+          if (imageList.length <= 1) {
+            return;
+          }
+          dragging = true;
+          pointerStartX = event.clientX;
+          pointerDeltaX = 0;
+          carouselViewport.setPointerCapture(event.pointerId);
+        });
+
+        carouselViewport.addEventListener("pointermove", (event) => {
+          if (!dragging) {
+            return;
+          }
+          pointerDeltaX = event.clientX - pointerStartX;
+        });
+
+        const finishDrag = () => {
+          if (!dragging) {
+            return;
+          }
+          if (Math.abs(pointerDeltaX) > 50) {
+            if (pointerDeltaX < 0) {
+              setActive(activeIndex + 1);
+            } else {
+              setActive(activeIndex - 1);
+            }
+          }
+          dragging = false;
+          pointerDeltaX = 0;
+        };
+
+        carouselViewport.addEventListener("pointerup", finishDrag);
+        carouselViewport.addEventListener("pointercancel", finishDrag);
+      })();
+    </script>
+  </body>
+</html>

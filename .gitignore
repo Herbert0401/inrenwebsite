@@ -1,0 +1,6 @@
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Local photo assets should not be tracked in git
+images/visuals/

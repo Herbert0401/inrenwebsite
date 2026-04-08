@@ -354,7 +354,7 @@
             thumbBtn.setAttribute("aria-label", `Go to image ${index + 1}`);
 
             const thumbImg = document.createElement("img");
-            thumbImg.src = src;
+            thumbImg.src = resolveAsset(src);
             thumbImg.alt = "";
             thumbBtn.appendChild(thumbImg);
 
@@ -396,6 +396,9 @@
         };
 
         renderSlides();
+        if (typeof window.inrenApplyAssetBase === "function") {
+          window.inrenApplyAssetBase(carousel);
+        }
 
         if (imageList.length <= 1) {
           carouselControls.classList.add("is-hidden");
